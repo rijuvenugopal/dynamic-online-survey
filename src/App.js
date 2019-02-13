@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Main from './components/Main';
 import './App.css';
 
-const App = () => (
-  <div className="App">
-    <h1>Dynamic Online Survey</h1>
-  </div>
-);
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <Main />
+      </div>
+    );
+  }
+};
 
 export default App;
