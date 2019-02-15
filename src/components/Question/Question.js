@@ -1,9 +1,9 @@
 import React from 'react';
 import './Question.css';
 
-const Question = ({ match }) => (
+const Question = ({ question }) => (
     <div className="QuestionComponent">
-        Question {match.params.questionId}
+        {question.text}
     </div>
 )
 

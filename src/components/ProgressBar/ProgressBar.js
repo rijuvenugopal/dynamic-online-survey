@@ -1,9 +1,9 @@
 import React from 'react';
 import './ProgressBar.css';
 
-const ProgressBar = () => (
+const ProgressBar = ({ currentQuestionOrder, totalQuestions }) => (
     <article className="ProgressBarComponent">
-        ProgressBar
+        ProgressBar {currentQuestionOrder} out of {totalQuestions}
     </article>
 );
 

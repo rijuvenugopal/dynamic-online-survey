@@ -1,24 +1,24 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navigation from './Navigation/Navigation';
 import ProgressBar from './ProgressBar/ProgressBar';
 import Question from './Question/Question';
 
-const Main = () => (
-    <Fragment>
-        <ProgressBar />
+const Main = ({ currentQuestionId, currentQuestionOrder, totalQuestions, questionsArray }) => (
+    <BrowserRouter>
+        <ProgressBar currentQuestionOrder={currentQuestionOrder} totalQuestions={totalQuestions}/>
         <main>
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path="/" render={() => (
-                        <h1>Welcome to Dynamic Online Survey!</h1>
-                    )}/>
-                    <Route path="/:questionId" component={Question} />
-                </Switch>
-            </BrowserRouter>
+            <Switch>
+                <Route exact path="/" render={() => (
+                    <h1>Welcome to Dynamic Online Survey!</h1>
+                )}/>
+                <Route path="/:questionId" render={({ match }) => (
+                    <Question question={questionsArray.find(qn => qn.id === match.params.questionId)} />
+                )} />
+            </Switch>
         </main>
         <Navigation />
-    </Fragment>
+    </BrowserRouter>
 );
 
 export default Main;
