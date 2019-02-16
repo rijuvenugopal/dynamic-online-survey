@@ -3,7 +3,7 @@ import './ProgressBar.css';
 
 const ProgressBar = ({ currentQuestionOrder, totalQuestions }) => (
     <article className="ProgressBarComponent">
-        ProgressBar {currentQuestionOrder} out of {totalQuestions}
+        ProgressBar {currentQuestionOrder + 1} out of {totalQuestions}
     </article>
 );
 

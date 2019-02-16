@@ -1,3 +1,8 @@
 .NavigationComponent {
     padding: 60px 0;
 }
+
+.NavigationComponent-link {
+    text-decoration: none;
+    color: inherit;
+}

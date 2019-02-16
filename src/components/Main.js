@@ -4,20 +4,33 @@ import Navigation from './Navigation/Navigation';
 import ProgressBar from './ProgressBar/ProgressBar';
 import Question from './Question/Question';
 
-const Main = ({ currentQuestionId, currentQuestionOrder, totalQuestions, questionsArray }) => (
+const Main = ({ 
+    currentQuestionId, 
+    currentQuestionOrder, 
+    totalQuestions, 
+    questionsArray, 
+    handlePrevNavigation, 
+    handleNextNavigation 
+}) => (
     <BrowserRouter>
         <ProgressBar currentQuestionOrder={currentQuestionOrder} totalQuestions={totalQuestions}/>
         <main>
             <Switch>
-                <Route exact path="/" render={() => (
-                    <h1>Welcome to Dynamic Online Survey!</h1>
-                )}/>
+                <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
                 <Route path="/:questionId" render={({ match }) => (
                     <Question question={questionsArray.find(qn => qn.id === match.params.questionId)} />
-                )} />
+                )}/>
+                {/* <Route path="/summary" render={({ match }) => (
+                    <Question question={questionsArray.find(qn => qn.id === match.params.questionId)} />
+                )}/> */}
             </Switch>
         </main>
-        <Navigation />
+        <Navigation 
+            handlePrevNavigation={handlePrevNavigation} 
+            handleNextNavigation={handleNextNavigation} 
+            currentQuestionOrder={currentQuestionOrder}
+            totalQuestions={totalQuestions}
+            questionsArray={questionsArray}/>
     </BrowserRouter>
 );
 
