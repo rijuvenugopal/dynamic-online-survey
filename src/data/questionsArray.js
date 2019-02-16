@@ -14,7 +14,7 @@ const questionsArray = [
     {
         id: "gender",
         text: "What is your gender?",
-        type: "radiobox",
+        type: "radiobutton",
         options: ["Male", "Female", "Other"]
     },
     {
@@ -26,7 +26,7 @@ const questionsArray = [
     {
         id: "from-eu",
         text: "Are you from EU?",
-        type: "radiobox",
+        type: "radiobutton",
         options: ["Yes", "No"]
     },
     {
@@ -44,7 +44,7 @@ const questionsArray = [
     {
         id: "stay-in-germany",
         text: "How long do you intend to stay in Germany?",
-        type: "radiobox",
+        type: "radiobutton",
         options: ["1 -3 yrs", "3 - 5 yrs", "5 - 8 yrs", "Above 8 yrs"]
     }
 ];
