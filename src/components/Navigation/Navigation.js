@@ -7,20 +7,21 @@ const Navigation = ({
     handleNextNavigation, 
     currentQuestionOrder, 
     totalQuestions,
-    questionsArray,
-    isSummaryPage
+    isSummaryPage,
+    prevRoute,
+    nextRoute
 }) => (
     <nav className="NavigationComponent">
         {currentQuestionOrder > 0 && (<button>
             <Link className="NavigationComponent-link" 
-                to={`/${questionsArray[currentQuestionOrder-1].id}`} 
+                to={prevRoute} 
                 onClick={handlePrevNavigation}>
                 back
             </Link>
         </button>)}
         {currentQuestionOrder < totalQuestions - 1 && (<button>
             <Link className="NavigationComponent-link" 
-                to={`/${questionsArray[currentQuestionOrder+1].id}`} 
+                to={nextRoute} 
                 onClick={handleNextNavigation}>
                 next
             </Link></button>)}

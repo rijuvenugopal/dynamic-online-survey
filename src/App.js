@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import Main from './components/Main';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Navigation from './components/Navigation/Navigation';
+import ProgressBar from './components/ProgressBar/ProgressBar';
+import Question from './components/Question/Question';
+import Summary from './components/Summary/Summary';
 import questionsArray from './data/questionsArray';
 import './App.css';
 
@@ -59,21 +63,30 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Main 
-          currentQuestionId = {this.state.currentQuestionId}
-          currentQuestionOrder = {this.state.currentQuestionOrder}
-          totalQuestions = {this.totalQuestions}  
-          questionsArray = {questionsArray}
-          handlePrevNavigation={this.handlePrevNavigation} 
-          handleNextNavigation={this.handleNextNavigation}
-          handleInputChange={this.handleInputChange}
-          summary={this.state.summary}
-          currentAnswer={this.state.currentAnswer}
-          questions={this.state.questions}
-          isSummaryPage={this.state.isSummaryPage}
+      <BrowserRouter>
+        <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
+          totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
+        <main>
+            <Switch>
+                <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
+                <Route path="/summary" render={({ match }) => (
+                    <Summary questions={this.state.questions} />
+                )}/>
+                <Route path="/:questionId" render={({ match }) => (
+                    <Question currentQuestionOrder={this.state.currentQuestionOrder} handleInputChange={this.handleInputChange} question={questionsArray} currentAnswer={this.state.currentAnswer}/>
+                )}/>
+            </Switch>
+        </main>
+        <Navigation 
+            handlePrevNavigation={this.handlePrevNavigation} 
+            handleNextNavigation={this.handleNextNavigation} 
+            currentQuestionOrder={this.state.currentQuestionOrder}
+            totalQuestions={this.totalQuestions}
+            isSummaryPage={this.state.isSummaryPage}
+            prevRoute={!this.state.isSummaryPage && this.state.currentQuestionOrder > 0 ? questionsArray[this.state.currentQuestionOrder-1].id : questionsArray[this.state.currentQuestionOrder].id}
+            nextRoute={this.state.currentQuestionOrder < this.totalQuestions - 1 ? questionsArray[this.state.currentQuestionOrder+1].id : questionsArray[this.state.currentQuestionOrder].id}
         />
-      </div>
+      </BrowserRouter>
     );
   }
 };
