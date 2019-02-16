@@ -10,7 +10,10 @@ const Main = ({
     totalQuestions, 
     questionsArray, 
     handlePrevNavigation, 
-    handleNextNavigation 
+    handleNextNavigation,
+    handleInputChange,
+    summary,
+    currentAnswer
 }) => (
     <BrowserRouter>
         <ProgressBar currentQuestionOrder={currentQuestionOrder} totalQuestions={totalQuestions}/>
@@ -18,7 +21,7 @@ const Main = ({
             <Switch>
                 <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
                 <Route path="/:questionId" render={({ match }) => (
-                    <Question question={questionsArray.find(qn => qn.id === match.params.questionId)} />
+                    <Question currentQuestionOrder={currentQuestionOrder} handleInputChange={handleInputChange} question={questionsArray} currentAnswer={currentAnswer}/>
                 )}/>
                 {/* <Route path="/summary" render={({ match }) => (
                     <Question question={questionsArray.find(qn => qn.id === match.params.questionId)} />

@@ -8,23 +8,53 @@ class App extends Component {
     super();
     this.state = {
       currentQuestionId: questionsArray[0].id,
-      currentQuestionOrder: 0
+      currentQuestionOrder: 0,
+      currentAnswer: "",
+      questions: questionsArray,
+      summary: questionsArray.map(qn => {
+        return {
+          id: qn.id,
+          question: qn.text, 
+          answer: ""
+      }})
     };
     this.totalQuestions = questionsArray.length;
   }
 
   handlePrevNavigation = () => {
-    this.setState((state) => ({
-      currentQuestionId: questionsArray[state.currentQuestionOrder - 1],
-      currentQuestionOrder: state.currentQuestionOrder - 1
-    }));
+    this.setState((state) => {
+      let questions = [...state.questions];
+      questions[state.currentQuestionOrder] = {
+        ...questions[state.currentQuestionOrder],
+        answer: state.currentAnswer
+      }
+      return {
+        currentQuestionId: questionsArray[state.currentQuestionOrder - 1].id,
+        currentQuestionOrder: state.currentQuestionOrder - 1,
+        currentAnswer: state.questions[state.currentQuestionOrder - 1].answer,
+        questions
+    }});
   }
 
   handleNextNavigation = () => {
-    this.setState((state) => ({
-      currentQuestionId: questionsArray[state.currentQuestionOrder + 1],
-      currentQuestionOrder: state.currentQuestionOrder + 1
-    }));
+    this.setState((state) => {
+      let questions = [...state.questions];
+      questions[state.currentQuestionOrder] = {
+        ...questions[state.currentQuestionOrder],
+        answer: state.currentAnswer
+      }
+      return {
+        currentQuestionId: questionsArray[state.currentQuestionOrder + 1].id,
+        currentQuestionOrder: state.currentQuestionOrder + 1,
+        currentAnswer: state.questions[state.currentQuestionOrder + 1].answer,
+        questions
+    }});
+  }
+
+  handleInputChange = (value) => {
+    this.setState({
+      currentAnswer: value
+    });
   }
 
   render() {
@@ -37,6 +67,9 @@ class App extends Component {
           questionsArray = {questionsArray}
           handlePrevNavigation={this.handlePrevNavigation} 
           handleNextNavigation={this.handleNextNavigation}
+          handleInputChange={this.handleInputChange}
+          summary={this.state.summary}
+          currentAnswer={this.state.currentAnswer}
         />
       </div>
     );
