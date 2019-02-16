@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navigation from './Navigation/Navigation';
 import ProgressBar from './ProgressBar/ProgressBar';
 import Question from './Question/Question';
+import Summary from './Summary/Summary';
 
 const Main = ({ 
     currentQuestionId, 
@@ -13,19 +14,21 @@ const Main = ({
     handleNextNavigation,
     handleInputChange,
     summary,
-    currentAnswer
+    currentAnswer,
+    questions,
+    isSummaryPage
 }) => (
     <BrowserRouter>
-        <ProgressBar currentQuestionOrder={currentQuestionOrder} totalQuestions={totalQuestions}/>
+        <ProgressBar currentQuestionOrder={currentQuestionOrder} totalQuestions={totalQuestions} isSummaryPage={isSummaryPage}/>
         <main>
             <Switch>
                 <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
+                <Route exact path="/summary" render={({ match }) => (
+                    <Summary questions={questions} />
+                )}/>
                 <Route path="/:questionId" render={({ match }) => (
                     <Question currentQuestionOrder={currentQuestionOrder} handleInputChange={handleInputChange} question={questionsArray} currentAnswer={currentAnswer}/>
                 )}/>
-                {/* <Route path="/summary" render={({ match }) => (
-                    <Question question={questionsArray.find(qn => qn.id === match.params.questionId)} />
-                )}/> */}
             </Switch>
         </main>
         <Navigation 
@@ -33,7 +36,8 @@ const Main = ({
             handleNextNavigation={handleNextNavigation} 
             currentQuestionOrder={currentQuestionOrder}
             totalQuestions={totalQuestions}
-            questionsArray={questionsArray}/>
+            questionsArray={questionsArray}
+            isSummaryPage={isSummaryPage}/>
     </BrowserRouter>
 );
 

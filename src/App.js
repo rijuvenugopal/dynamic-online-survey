@@ -11,43 +11,43 @@ class App extends Component {
       currentQuestionOrder: 0,
       currentAnswer: "",
       questions: questionsArray,
-      summary: questionsArray.map(qn => {
-        return {
-          id: qn.id,
-          question: qn.text, 
-          answer: ""
-      }})
+      isSummaryPage: false
     };
     this.totalQuestions = questionsArray.length;
   }
 
   handlePrevNavigation = () => {
     this.setState((state) => {
+      const newQuestionOrder = state.isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder - 1;
       let questions = [...state.questions];
       questions[state.currentQuestionOrder] = {
         ...questions[state.currentQuestionOrder],
         answer: state.currentAnswer
       }
       return {
-        currentQuestionId: questionsArray[state.currentQuestionOrder - 1].id,
-        currentQuestionOrder: state.currentQuestionOrder - 1,
-        currentAnswer: state.questions[state.currentQuestionOrder - 1].answer,
-        questions
+        currentQuestionId: questionsArray[newQuestionOrder].id,
+        currentQuestionOrder: newQuestionOrder,
+        currentAnswer: state.questions[newQuestionOrder].answer,
+        questions,
+        isSummaryPage: false
     }});
   }
 
   handleNextNavigation = () => {
     this.setState((state) => {
+      const isSummaryPage = state.currentQuestionOrder === this.totalQuestions - 1;
+      const newQuestionOrder = isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder + 1;
       let questions = [...state.questions];
       questions[state.currentQuestionOrder] = {
         ...questions[state.currentQuestionOrder],
         answer: state.currentAnswer
       }
       return {
-        currentQuestionId: questionsArray[state.currentQuestionOrder + 1].id,
-        currentQuestionOrder: state.currentQuestionOrder + 1,
-        currentAnswer: state.questions[state.currentQuestionOrder + 1].answer,
-        questions
+        currentQuestionId: questionsArray[newQuestionOrder].id,
+        currentQuestionOrder: newQuestionOrder,
+        currentAnswer: state.questions[newQuestionOrder].answer,
+        questions,
+        isSummaryPage
     }});
   }
 
@@ -70,6 +70,8 @@ class App extends Component {
           handleInputChange={this.handleInputChange}
           summary={this.state.summary}
           currentAnswer={this.state.currentAnswer}
+          questions={this.state.questions}
+          isSummaryPage={this.state.isSummaryPage}
         />
       </div>
     );

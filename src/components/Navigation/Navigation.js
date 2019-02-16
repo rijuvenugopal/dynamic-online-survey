@@ -7,15 +7,30 @@ const Navigation = ({
     handleNextNavigation, 
     currentQuestionOrder, 
     totalQuestions,
-    questionsArray
+    questionsArray,
+    isSummaryPage
 }) => (
     <nav className="NavigationComponent">
-        {currentQuestionOrder > 0 && (<button><Link className="NavigationComponent-link" to={`/${questionsArray[currentQuestionOrder-1].id}`} onClick={handlePrevNavigation}>
-            back
-        </Link></button>)}
-        {currentQuestionOrder < totalQuestions - 1 && (<button><Link className="NavigationComponent-link" to={`/${questionsArray[currentQuestionOrder+1].id}`} onClick={handleNextNavigation}>
-            next
-        </Link></button>)}
+        {currentQuestionOrder > 0 && (<button>
+            <Link className="NavigationComponent-link" 
+                to={`/${questionsArray[currentQuestionOrder-1].id}`} 
+                onClick={handlePrevNavigation}>
+                back
+            </Link>
+        </button>)}
+        {currentQuestionOrder < totalQuestions - 1 && (<button>
+            <Link className="NavigationComponent-link" 
+                to={`/${questionsArray[currentQuestionOrder+1].id}`} 
+                onClick={handleNextNavigation}>
+                next
+            </Link></button>)}
+        {currentQuestionOrder === totalQuestions - 1 && !isSummaryPage && (<button>
+            <Link className="NavigationComponent-link" 
+            to="/summary" 
+            onClick={handleNextNavigation}>
+                next
+            </Link>
+        </button>)}
     </nav>
 );
 

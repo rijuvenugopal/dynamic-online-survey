@@ -36,7 +36,7 @@ const questionsArray = [
     },
     {
         id: "favourite-city",
-        text: "Whis is your favourite city in Germany among these?",
+        text: "Which is your favourite city in Germany among these?",
         type: "dropdown",
         options: ["Berlin", "Munich", "Hamburg", "Cologne", "Dusseldorf", "Stuttgart", "Frankfurt", "Nuremberg"],
         answer: ""
