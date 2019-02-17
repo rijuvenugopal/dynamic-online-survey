@@ -3,37 +3,29 @@ import { Link } from 'react-router-dom';
 import './Navigation.css';
 
 const Navigation = ({ 
-    handlePrevNavigation, 
-    handleNextNavigation, 
+    handleNavigation,
     currentQuestionOrder, 
     totalQuestions,
     isSummaryPage,
     currentAnswer,
     isError,
-    prevRoute,
-    nextRoute
+    prevLocation,
+    nextLocation,
 }) => (
     <nav className="NavigationComponent">
         {currentQuestionOrder > 0 && (<button>
             <Link className="NavigationComponent-link" 
-                to={prevRoute} 
-                onClick={handlePrevNavigation}>
+                to={prevLocation}
+                onClick={() => handleNavigation(-1)}>
                 back
             </Link>
         </button>)}
-        {currentQuestionOrder < totalQuestions - 1 && (<button disabled={!currentAnswer || isError}>
+        {currentQuestionOrder < totalQuestions && !isSummaryPage && (<button disabled={!currentAnswer || isError}>
             <Link className="NavigationComponent-link" 
-                to={nextRoute}
-                onClick={handleNextNavigation}>
+                to={nextLocation}
+                onClick={() => handleNavigation(1)}>
                 next
             </Link></button>)}
-        {currentQuestionOrder === totalQuestions - 1 && !isSummaryPage && (<button disabled={!currentAnswer || isError}>
-            <Link className="NavigationComponent-link" 
-            to="/summary" 
-            onClick={handleNextNavigation}>
-                next
-            </Link>
-        </button>)}
     </nav>
 );
 

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+
 import Navigation from './components/Navigation/Navigation';
 import ProgressBar from './components/ProgressBar/ProgressBar';
 import Question from './components/Question/Question';
@@ -19,41 +21,60 @@ class App extends Component {
       isSummaryPage: false
     };
     this.totalQuestions = questionsArray.length;
+    this.history = createBrowserHistory();
   }
 
-  handlePrevNavigation = () => {
-    this.setState((state) => {
-      const newQuestionOrder = state.isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder - 1;
-      let questions = [...state.questions];
-      questions[state.currentQuestionOrder] = {
-        ...questions[state.currentQuestionOrder],
-        answer: state.currentAnswer
+  componentDidMount() {
+    this.unlisten = this.history.listen((location, action) => {
+      const path = location.pathname.replace('/','');
+      const currentQn = this.state.questions.find(qn => qn.id === path);
+
+      if (currentQn) {
+        const currentQuestionOrder = this.state.questions.indexOf(currentQn);
+        this.setState({
+          currentQuestionOrder
+        }, () => {
+          this.handleNavigation(0);
+        });
+      } else {
+        this.handleNavigation(1);
       }
-      return {
-        currentQuestionId: questionsArray[newQuestionOrder].id,
-        currentQuestionOrder: newQuestionOrder,
-        currentAnswer: state.questions[newQuestionOrder].answer,
-        questions,
-        isSummaryPage: false
-    }});
+      
+    });
   }
 
-  handleNextNavigation = () => {
+  componentWillUnmount() {
+    this.unlisten();
+  }
+
+  handleNavigation = (value) => {
     this.setState((state) => {
-      const isSummaryPage = state.currentQuestionOrder === this.totalQuestions - 1;
-      const newQuestionOrder = isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder + 1;
+      let newQuestionOrder = state.currentQuestionOrder;
+      let isSummaryPage = false;
       let questions = [...state.questions];
-      questions[state.currentQuestionOrder] = {
-        ...questions[state.currentQuestionOrder],
-        answer: state.currentAnswer
+      
+      
+      if (value !== 0) {
+        questions[state.currentQuestionOrder] = {
+          ...questions[state.currentQuestionOrder],
+          answer: state.currentAnswer
+        }
+        if (value === 1) {
+          isSummaryPage = state.currentQuestionOrder === this.totalQuestions - 1;
+          newQuestionOrder = isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder + 1;
+        } else {
+          newQuestionOrder = state.isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder - 1;
+        }
       }
+
       return {
         currentQuestionId: questionsArray[newQuestionOrder].id,
         currentQuestionOrder: newQuestionOrder,
         currentAnswer: state.questions[newQuestionOrder].answer,
         questions,
         isSummaryPage
-    }});
+      }
+    });
   }
 
   handleInputChange = (value) => {
@@ -67,6 +88,17 @@ class App extends Component {
   }
 
   render() {
+    const prevPath = !this.state.isSummaryPage && this.state.currentQuestionOrder > 0 ? questionsArray[this.state.currentQuestionOrder-1].id : questionsArray[this.state.currentQuestionOrder].id;
+    const nextPath = this.state.currentQuestionOrder < this.totalQuestions - 1 ? questionsArray[this.state.currentQuestionOrder+1].id : "summary";
+    const prevLocation = {
+      pathname: prevPath,
+      state: this.state
+    };
+    const nextLocation = {
+      pathname: nextPath,
+      state: this.state
+    };
+
     return (
       <BrowserRouter>
         <>
@@ -89,15 +121,14 @@ class App extends Component {
               </Switch>
           </main>
           <Navigation 
-              handlePrevNavigation={this.handlePrevNavigation} 
-              handleNextNavigation={this.handleNextNavigation} 
+              handleNavigation={this.handleNavigation}
               currentQuestionOrder={this.state.currentQuestionOrder}
               totalQuestions={this.totalQuestions}
               isSummaryPage={this.state.isSummaryPage}
               currentAnswer={this.state.currentAnswer}
               isError={this.state.error}
-              prevRoute={!this.state.isSummaryPage && this.state.currentQuestionOrder > 0 ? questionsArray[this.state.currentQuestionOrder-1].id : questionsArray[this.state.currentQuestionOrder].id}
-              nextRoute={this.state.currentQuestionOrder < this.totalQuestions - 1 ? questionsArray[this.state.currentQuestionOrder+1].id : questionsArray[this.state.currentQuestionOrder].id}
+              prevLocation={prevLocation}
+              nextLocation={nextLocation}
           />
         </>
       </BrowserRouter>
