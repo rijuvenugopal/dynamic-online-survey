@@ -11,22 +11,28 @@ const Navigation = ({
     isError,
     prevLocation,
     nextLocation,
-}) => (
-    <nav className="NavigationComponent">
-        {currentQuestionOrder > 0 && (<button>
-            <Link className="NavigationComponent-link" 
-                to={prevLocation}
-                onClick={() => handleNavigation(-1)}>
-                back
-            </Link>
-        </button>)}
-        {currentQuestionOrder < totalQuestions && !isSummaryPage && (<button disabled={!currentAnswer || isError}>
-            <Link className="NavigationComponent-link" 
-                to={nextLocation}
-                onClick={() => handleNavigation(1)}>
-                next
-            </Link></button>)}
-    </nav>
-);
+}) => {
+    const isNextDisabled = !currentAnswer || isError;
+    
+    return (
+        <nav className="NavigationComponent">
+            {currentQuestionOrder > 0 && (<button>
+                <Link className="NavigationComponent-link" 
+                    to={prevLocation}
+                    onClick={() => { handleNavigation(-1)} }>
+                    back
+                </Link>
+            </button>)}
+            {currentQuestionOrder < totalQuestions && !isSummaryPage && (<button disabled={isNextDisabled}>
+                <Link className="NavigationComponent-link" 
+                    to={isNextDisabled ? null: nextLocation}
+                    onClick={() => {
+                        if (!isNextDisabled) handleNavigation(1);
+                    }}>
+                    next
+                </Link></button>)}
+        </nav>
+    )
+};
 
 export default Navigation;

@@ -47,12 +47,15 @@ class App extends Component {
     this.unlisten();
   }
 
+  /* value can have 3 possible values
+  ** -1 for back button, 1 for next button &
+  ** 0 for browser back/forward navigation 
+  */
   handleNavigation = (value) => {
     this.setState((state) => {
       let newQuestionOrder = state.currentQuestionOrder;
       let isSummaryPage = false;
       let questions = [...state.questions];
-      
       
       if (value !== 0) {
         questions[state.currentQuestionOrder] = {
