@@ -12,16 +12,34 @@ import './App.css';
 class App extends Component {
   constructor() {
     super();
+
+    let questionsIndex = 0;
+    let onlineSurveyObject = questionsArray;
+    let isSummaryPage = false;
+
+    const onlineSurveyObjectItem = localStorage.getItem('onlineSurveyObject');    
+    if (onlineSurveyObjectItem) {
+      onlineSurveyObject = JSON.parse(onlineSurveyObjectItem);
+      questionsIndex = onlineSurveyObject.findIndex(qn => qn.answer === "");
+      if (questionsIndex < 0) {
+        questionsIndex = onlineSurveyObject.length - 1;
+        isSummaryPage = true;
+      }
+    }
+
+    const currentPath = isSummaryPage ? 'summary' : onlineSurveyObject[questionsIndex].id;
+    this.history = createBrowserHistory();
+    this.history.push(currentPath);
+
     this.state = {
-      currentQuestionId: questionsArray[0].id,
-      currentQuestionOrder: 0,
-      currentAnswer: "",
-      error: false,
-      questions: questionsArray,
-      isSummaryPage: false
+      currentQuestionId: onlineSurveyObject[questionsIndex].id,
+      currentQuestionOrder: questionsIndex,
+      currentAnswer: onlineSurveyObject[questionsIndex].answer,
+      error: this.getErrorState(onlineSurveyObject[questionsIndex], onlineSurveyObject[questionsIndex].answer),
+      questions: onlineSurveyObject,
+      isSummaryPage
     };
     this.totalQuestions = questionsArray.length;
-    this.history = createBrowserHistory();
   }
 
   componentDidMount() {
@@ -39,7 +57,6 @@ class App extends Component {
       } else {
         this.handleNavigation(1);
       }
-      
     });
   }
 
@@ -69,21 +86,32 @@ class App extends Component {
           newQuestionOrder = state.isSummaryPage ? state.currentQuestionOrder: state.currentQuestionOrder - 1;
         }
       }
-
+      
       return {
         currentQuestionId: questionsArray[newQuestionOrder].id,
         currentQuestionOrder: newQuestionOrder,
         currentAnswer: state.questions[newQuestionOrder].answer,
+        error: this.getErrorState(questionsArray[newQuestionOrder], state.questions[newQuestionOrder].answer),
         questions,
         isSummaryPage
+      }
+    }, () => {
+      if (value !== 0) {
+        localStorage.setItem('onlineSurveyObject', JSON.stringify(this.state.questions));
       }
     });
   }
 
-  handleInputChange = (value) => {
-    const patternString = this.state.questions[this.state.currentQuestionOrder].validation;
+  getErrorState = (question, value) => {
+    if (!value) return false;
+    
+    const patternString = question.validation;
     const pattern = new RegExp(patternString, "i");
-    const isError = !pattern.test(value);
+    return !pattern.test(value);
+  }
+
+  handleInputChange = (value) => {
+    const isError = this.getErrorState(this.state.questions[this.state.currentQuestionOrder], value);
     this.setState({
       currentAnswer: value,
       error: isError
@@ -104,36 +132,34 @@ class App extends Component {
 
     return (
       <BrowserRouter>
-        <>
-          <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
-            totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
-          <main>
-              <Switch>
-                  <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
-                  <Route path="/summary" render={({ match }) => (
-                      <Summary questions={this.state.questions} />
-                  )}/>
-                  <Route path="/:questionId" render={({ match }) => (
-                      <Question currentQuestionOrder={this.state.currentQuestionOrder} 
-                        handleInputChange={this.handleInputChange} 
-                        question={questionsArray} 
-                        currentAnswer={this.state.currentAnswer}
-                        error={this.state.error}
-                      />
-                  )}/>
-              </Switch>
-          </main>
-          <Navigation 
-              handleNavigation={this.handleNavigation}
-              currentQuestionOrder={this.state.currentQuestionOrder}
-              totalQuestions={this.totalQuestions}
-              isSummaryPage={this.state.isSummaryPage}
-              currentAnswer={this.state.currentAnswer}
-              isError={this.state.error}
-              prevLocation={prevLocation}
-              nextLocation={nextLocation}
-          />
-        </>
+        <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
+          totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
+        <main>
+            <Switch>
+                <Route exact path="/" redirectTo={`/${this.state.isSummaryPage? "summary": this.state.currentQuestionId}`}/>
+                <Route path="/summary" render={({ match }) => (
+                    <Summary questions={this.state.questions} />
+                )}/>
+                <Route path="/:questionId" render={({ match }) => (
+                    <Question currentQuestionOrder={this.state.currentQuestionOrder} 
+                      handleInputChange={this.handleInputChange} 
+                      question={questionsArray} 
+                      currentAnswer={this.state.currentAnswer}
+                      error={this.state.error}
+                    />
+                )}/>
+            </Switch>
+        </main>
+        <Navigation 
+            handleNavigation={this.handleNavigation}
+            currentQuestionOrder={this.state.currentQuestionOrder}
+            totalQuestions={this.totalQuestions}
+            isSummaryPage={this.state.isSummaryPage}
+            currentAnswer={this.state.currentAnswer}
+            isError={this.state.error}
+            prevLocation={prevLocation}
+            nextLocation={nextLocation}
+        />
       </BrowserRouter>
     );
   }

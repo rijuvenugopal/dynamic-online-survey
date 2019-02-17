@@ -7,7 +7,7 @@ const Summary = ({
     <article className="SummaryComponent">
         <ol>
             {questions.map(qn => (
-                <li>
+                <li key={qn.id}>
                     <span>{qn.text}</span>
                     <span>{qn.answer}</span>
                 </li>
