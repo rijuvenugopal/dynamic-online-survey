@@ -14,6 +14,7 @@ class App extends Component {
       currentQuestionId: questionsArray[0].id,
       currentQuestionOrder: 0,
       currentAnswer: "",
+      error: false,
       questions: questionsArray,
       isSummaryPage: false
     };
@@ -56,36 +57,49 @@ class App extends Component {
   }
 
   handleInputChange = (value) => {
+    const patternString = this.state.questions[this.state.currentQuestionOrder].validation;
+    const pattern = new RegExp(patternString, "i");
+    const isError = !pattern.test(value);
     this.setState({
-      currentAnswer: value
+      currentAnswer: value,
+      error: isError
     });
   }
 
   render() {
     return (
       <BrowserRouter>
-        <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
-          totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
-        <main>
-            <Switch>
-                <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
-                <Route path="/summary" render={({ match }) => (
-                    <Summary questions={this.state.questions} />
-                )}/>
-                <Route path="/:questionId" render={({ match }) => (
-                    <Question currentQuestionOrder={this.state.currentQuestionOrder} handleInputChange={this.handleInputChange} question={questionsArray} currentAnswer={this.state.currentAnswer}/>
-                )}/>
-            </Switch>
-        </main>
-        <Navigation 
-            handlePrevNavigation={this.handlePrevNavigation} 
-            handleNextNavigation={this.handleNextNavigation} 
-            currentQuestionOrder={this.state.currentQuestionOrder}
-            totalQuestions={this.totalQuestions}
-            isSummaryPage={this.state.isSummaryPage}
-            prevRoute={!this.state.isSummaryPage && this.state.currentQuestionOrder > 0 ? questionsArray[this.state.currentQuestionOrder-1].id : questionsArray[this.state.currentQuestionOrder].id}
-            nextRoute={this.state.currentQuestionOrder < this.totalQuestions - 1 ? questionsArray[this.state.currentQuestionOrder+1].id : questionsArray[this.state.currentQuestionOrder].id}
-        />
+        <>
+          <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
+            totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
+          <main>
+              <Switch>
+                  <Route exact path="/" redirectTo={`/${questionsArray[0].id}`} />
+                  <Route path="/summary" render={({ match }) => (
+                      <Summary questions={this.state.questions} />
+                  )}/>
+                  <Route path="/:questionId" render={({ match }) => (
+                      <Question currentQuestionOrder={this.state.currentQuestionOrder} 
+                        handleInputChange={this.handleInputChange} 
+                        question={questionsArray} 
+                        currentAnswer={this.state.currentAnswer}
+                        error={this.state.error}
+                      />
+                  )}/>
+              </Switch>
+          </main>
+          <Navigation 
+              handlePrevNavigation={this.handlePrevNavigation} 
+              handleNextNavigation={this.handleNextNavigation} 
+              currentQuestionOrder={this.state.currentQuestionOrder}
+              totalQuestions={this.totalQuestions}
+              isSummaryPage={this.state.isSummaryPage}
+              currentAnswer={this.state.currentAnswer}
+              isError={this.state.error}
+              prevRoute={!this.state.isSummaryPage && this.state.currentQuestionOrder > 0 ? questionsArray[this.state.currentQuestionOrder-1].id : questionsArray[this.state.currentQuestionOrder].id}
+              nextRoute={this.state.currentQuestionOrder < this.totalQuestions - 1 ? questionsArray[this.state.currentQuestionOrder+1].id : questionsArray[this.state.currentQuestionOrder].id}
+          />
+        </>
       </BrowserRouter>
     );
   }

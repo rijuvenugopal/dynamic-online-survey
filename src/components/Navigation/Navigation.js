@@ -8,6 +8,8 @@ const Navigation = ({
     currentQuestionOrder, 
     totalQuestions,
     isSummaryPage,
+    currentAnswer,
+    isError,
     prevRoute,
     nextRoute
 }) => (
@@ -19,13 +21,13 @@ const Navigation = ({
                 back
             </Link>
         </button>)}
-        {currentQuestionOrder < totalQuestions - 1 && (<button>
+        {currentQuestionOrder < totalQuestions - 1 && (<button disabled={!currentAnswer || isError}>
             <Link className="NavigationComponent-link" 
-                to={nextRoute} 
+                to={nextRoute}
                 onClick={handleNextNavigation}>
                 next
             </Link></button>)}
-        {currentQuestionOrder === totalQuestions - 1 && !isSummaryPage && (<button>
+        {currentQuestionOrder === totalQuestions - 1 && !isSummaryPage && (<button disabled={!currentAnswer || isError}>
             <Link className="NavigationComponent-link" 
             to="/summary" 
             onClick={handleNextNavigation}>

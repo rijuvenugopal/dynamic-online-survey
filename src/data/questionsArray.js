@@ -3,14 +3,14 @@ const questionsArray = [
         id: "name",
         text: "What is your name?",
         type: "textbox",
-        validation: "words",
+        validation: "^[a-z]+$",
         answer: ""
     },
     {
         id: "age",
         text: "What is your age?",
         type: "textbox",
-        validation: "number from 1-130",
+        validation: "^[1-9][0-9]?$|^100$",
         answer: ""
     },
     {
@@ -45,14 +45,14 @@ const questionsArray = [
         id: "company-name",
         text: "What is the name of the company you are working in?",
         type: "textbox",
-        validation: "words",
+        validation: "^[a-z0-9]+$",
         answer: ""
     },
     {
         id: "stay-in-germany",
         text: "How long do you intend to stay in Germany?",
         type: "radiobutton",
-        options: ["1 -3 yrs", "3 - 5 yrs", "5 - 8 yrs", "Above 8 yrs"],
+        options: ["1 - 3 yrs", "3 - 5 yrs", "5 - 8 yrs", "Above 8 yrs"],
         answer: ""
     }
 ];

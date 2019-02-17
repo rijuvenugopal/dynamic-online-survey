@@ -1,31 +1,43 @@
 import React from 'react';
 import './Question.css';
 
-const Question = ({ currentQuestionOrder, question, handleInputChange, summary, currentAnswer }) => (
-    <div className="QuestionComponent">
-        <h1>{question[currentQuestionOrder].text}</h1>
-        {question[currentQuestionOrder].type === "textbox" && (
-            <input type="text" value={currentAnswer} onChange={(e) => handleInputChange(e.currentTarget.value)}/>
-        )}
-        {question[currentQuestionOrder].type === "dropdown" && (
-            <select onChange={(e) => handleInputChange(e.currentTarget.value)}>
-                {question[currentQuestionOrder].options.map((value) => (
-                    <option key={value} value={value} selected={currentAnswer === value}>{value}</option>
+const Question = ({ currentQuestionOrder, question, handleInputChange, error, currentAnswer }) => {
+    const currentQuestion = question[currentQuestionOrder];
+    
+    return (
+        <div className="QuestionComponent">
+            <h1>{currentQuestion.text}</h1>
+            {currentQuestion.type === "textbox" && (
+                <>
+                    <input type="text" className={error ? "QuestionComponent-errorField" : ""} 
+                        value={currentAnswer} pattern={currentQuestion.validation}
+                        onChange={(e) => handleInputChange(e.currentTarget.value)}/>
+                    {error && (<div className="QuestionComponent-errorText">Please enter a valid value</div>)}
+                </>
+            )}
+            {currentQuestion.type === "dropdown" && (
+                <select onChange={(e) => handleInputChange(e.currentTarget.value)}>
+                    <option key="empty" value={""}>Select an option</option>
+                    {currentQuestion.options.map((value) => (
+                        <option key={value} value={value} 
+                            selected={currentAnswer === value}>{value}</option>
+                    ))}
+                </select>
+            )}
+            {currentQuestion.type === "radiobutton" && (
+                <div>
+                {currentQuestion.options.map((value) => (
+                    <div key={value}>
+                        <input id={value} type="radio" name={currentQuestion.id} 
+                        checked={currentAnswer === value} value={value} 
+                        onChange={(e) => handleInputChange(e.currentTarget.value)} />
+                        <label htmlFor={value}>{value}</label>
+                    </div>
                 ))}
-            </select>
-        )}
-        {question[currentQuestionOrder].type === "radiobutton" && (
-            <div>
-            {question[currentQuestionOrder].options.map((value) => (
-                <div key={value}>
-                    <input id={value} type="radio" name={question[currentQuestionOrder].id} checked={currentAnswer === value} 
-                        value={value} onChange={(e) => handleInputChange(e.currentTarget.value)} />
-                    <label htmlFor={value}>{value}</label>
                 </div>
-            ))}
-            </div>
-        )}
-    </div>
-)
+            )}
+        </div>
+    )
+}
 
 export default Question;
