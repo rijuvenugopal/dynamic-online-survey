@@ -43,7 +43,7 @@ const questionsArray = [
     },
     {
         id: "company-name",
-        text: "What is the name of the company you are working in?",
+        text: "What is the name of the company you are working at?",
         type: "textbox",
         validation: "^[a-z0-9]+$",
         answer: ""

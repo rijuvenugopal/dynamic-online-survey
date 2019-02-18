@@ -1,5 +1,16 @@
 .QuestionComponent {
-    padding: 60px 0;
+    margin-left: 2px;
+}
+.QuestionComponent-questionText {
+    font-size: 1.4em;
+}
+.QuestionComponent-answerText {
+    height: 25px;
+    font-size: 1em;
+}
+.QuestionComponent-answerSelect {
+    height: 25px;
+    font-size: 1em;
 }
 .QuestionComponent-errorField {
     border: 1px solid red;

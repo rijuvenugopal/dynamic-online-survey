@@ -1,0 +1,7 @@
+.SummaryComponent-item {
+    display: block;
+}
+.SummaryComponent-item:last-child {
+    margin-bottom: 10px;
+    color: #006621;
+}

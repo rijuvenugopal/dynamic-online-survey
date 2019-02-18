@@ -1,10 +1,46 @@
 .NavigationComponent {
-    padding: 60px 0;
+    margin: 0 15px 60px;
+    display: flex;
     position: fixed;
-    bottom: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .NavigationComponent-link {
     text-decoration: none;
     color: inherit;
+    width: 100%;
+    border-radius: 15px;
+    border: 1px solid gray;
+    background-color: #F4F7F9;
+    padding: 5px 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.NavigationComponent-link:first-child {
+    margin-right: 15px;
+}
+
+.NavigationComponent-link.disabled {
+    background-color: #e1e1e1;
+    cursor: auto;
+}
+
+@media only screen and (min-width:480px) {
+    .NavigationComponent {
+        margin: 0 30px 60px;
+        justify-content: space-between;
+    }
+    .NavigationComponent-link {
+        width: 150px;
+    }
+}
+
+@media only screen and (min-width:768px) {
+    .NavigationComponent {
+        margin: 60px 0 0;
+        position: static;
+    }
 }

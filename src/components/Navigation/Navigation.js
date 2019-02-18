@@ -16,21 +16,22 @@ const Navigation = ({
 
     return (
         <nav className="NavigationComponent">
-            {currentQuestionOrder > 0 && (<button>
-                <Link className="NavigationComponent-link" 
+            {currentQuestionOrder > 0 && 
+                (<Link className="NavigationComponent-link" 
                     to={prevLocation}
                     onClick={() => { handleNavigation(-1) }}>
                     back
-                </Link>
-            </button>)}
-            {currentQuestionOrder < totalQuestions && !isSummaryPage && (<button disabled={isNextDisabled}>
-                <Link className="NavigationComponent-link" 
+                </Link>)
+            }
+            {currentQuestionOrder < totalQuestions && !isSummaryPage && 
+                (<Link className={`NavigationComponent-link${isNextDisabled ? " disabled" : ""}`}
                     to={isNextDisabled ? null : nextLocation}
                     onClick={() => {
                         if (!isNextDisabled) handleNavigation(1);
                     }}>
                     next
-                </Link></button>)}
+                </Link>)
+            }
         </nav>
     )
 };

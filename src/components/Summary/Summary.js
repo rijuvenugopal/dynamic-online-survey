@@ -8,8 +8,8 @@ const Summary = ({
         <ol>
             {questions.map(qn => (
                 <li key={qn.id}>
-                    <span>{qn.text}</span>
-                    <span>{qn.answer}</span>
+                    <span className="SummaryComponent-item">{qn.text}</span>
+                    <span className="SummaryComponent-item">{qn.answer}</span>
                 </li>
             ))}
         </ol>

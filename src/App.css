@@ -1,3 +1,37 @@
 .App {
-  margin: 60px;
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 30px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.MainComponent {
+  align-self: baseline;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+@media only screen and (min-width: 480px) {
+  .App {
+    margin: 60px auto;
+  }
+  .MainComponent {
+    align-self: unset;
+  }
+}
+
+@media only screen and (min-height: 600px) {
+  .MainComponent {
+    max-height: 400px
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .App {
+    margin: 60px auto;
+    padding: 0 60px;
+  }
 }
