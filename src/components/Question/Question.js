@@ -5,7 +5,7 @@ const Question = ({ currentQuestionOrder, question, handleInputChange, error, cu
     const currentQuestion = question[currentQuestionOrder];
     
     return (
-        <div className="QuestionComponent">
+        <>
             <p className="QuestionComponent-questionText">{currentQuestion.text}</p>
             {currentQuestion.type === "textbox" && (
                 <>
@@ -27,17 +27,17 @@ const Question = ({ currentQuestionOrder, question, handleInputChange, error, cu
             )}
             {currentQuestion.type === "radiobutton" && (
                 <div>
-                {currentQuestion.options.map((value) => (
-                    <div key={value}>
-                        <input id={value} type="radio" name={currentQuestion.id}
-                            checked={currentAnswer === value} value={value} 
-                            onChange={(e) => handleInputChange(e.currentTarget.value)} />
-                        <label htmlFor={value}>{value}</label>
-                    </div>
-                ))}
+                    {currentQuestion.options.map((value) => (
+                        <section key={value}>
+                            <input id={value} type="radio" name={currentQuestion.id}
+                                checked={currentAnswer === value} value={value} 
+                                onChange={(e) => handleInputChange(e.currentTarget.value)} />
+                            <label htmlFor={value}>{value}</label>
+                        </section>
+                    ))}
                 </div>
             )}
-        </div>
+        </>
     )
 }
 

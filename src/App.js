@@ -134,6 +134,7 @@ class App extends Component {
       <BrowserRouter>
         <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
           totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
+
         <main className="MainComponent">
             <Switch>
                 <Route exact path="/" redirectTo={`/${this.state.isSummaryPage? "summary": this.state.currentQuestionId}`}/>
@@ -150,6 +151,7 @@ class App extends Component {
                 )}/>
             </Switch>
         </main>
+        
         <Navigation 
             handleNavigation={this.handleNavigation}
             currentQuestionOrder={this.state.currentQuestionOrder}
