@@ -129,11 +129,13 @@ class App extends Component {
       pathname: nextPath,
       state: this.state
     };
+    const answeredQuestions = this.state.questions.filter(qn => qn.answer !== "");
 
     return (
       <BrowserRouter>
-        <ProgressBar currentQuestionOrder={this.state.currentQuestionOrder} 
-          totalQuestions={this.totalQuestions} isSummaryPage={this.state.isSummaryPage}/>
+        <ProgressBar
+          answeredQuestions={answeredQuestions.length}
+          totalQuestions={this.totalQuestions} />
 
         <main className="MainComponent">
             <Switch>

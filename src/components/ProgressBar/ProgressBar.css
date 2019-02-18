@@ -1,3 +1,17 @@
 .ProgressBarComponent {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    width: 100%;
+}
+.percentBars {
+    height: 25px;
+    background-color: gainsboro;
+    -webkit-transition: width 2s ease 0s;
+    transition: width 2s ease 0s;
+}
+.percent-0 {
+    background-color: green;
+}
+.percent-1 {
+    background-color: lightgreen;
 }
